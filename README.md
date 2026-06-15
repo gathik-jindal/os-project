@@ -1,6 +1,5 @@
 # OS Project: Multi-User Client/Server System
 
-![CI](https://img.shields.io/github/actions/workflow/status/gathi/os-project/ci.yml?branch=main&label=ci)
 ![Language](https://img.shields.io/badge/language-C-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-POSIX%20%7C%20WSL%20%7C%20Linux-lightgrey.svg)
 ![Build](https://img.shields.io/badge/build-make-success.svg)
