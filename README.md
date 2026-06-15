@@ -1,18 +1,24 @@
 # OS Project: Multi-User Client/Server System
 
-A course project written in C that implements a threaded client/server application for managing users, students, faculty, courses, and enrollments.
+![CI](https://img.shields.io/github/actions/workflow/status/gathi/os-project/ci.yml?branch=main&label=ci)
+![Language](https://img.shields.io/badge/language-C-blue.svg)
+![Platform](https://img.shields.io/badge/platform-POSIX%20%7C%20WSL%20%7C%20Linux-lightgrey.svg)
+![Build](https://img.shields.io/badge/build-make-success.svg)
+
+Course project in C that implements a threaded client/server application for managing users, students, faculty, courses, and enrollments.
 
 The server listens on a TCP socket, handles each client in a separate thread, and persists application data to local binary files under `data/`.
 
-## Highlights
+## Overview
 
-- Threaded TCP server built with POSIX sockets and `pthread`
-- Role-based flows for admin, faculty, and student users
-- Account creation and login over a simple terminal client
-- File-backed persistence with automatic data directory bootstrapping
-- Default admin account created on first run
+This project provides a terminal-based workflow for:
 
-## Repository Layout
+- Creating accounts for admin, faculty, and student roles
+- Logging in through a simple socket client
+- Managing course and enrollment records on the server
+- Persisting application state in binary files for local coursework use
+
+## Repository Structure
 
 ```text
 .
@@ -25,15 +31,15 @@ The server listens on a TCP socket, handles each client in a separate thread, an
 └── report.pdf
 ```
 
-Generated files such as build outputs and runtime data are ignored from version control.
+Generated build artifacts and runtime data are intentionally excluded from version control.
 
-## Requirements
+## Prerequisites
 
 - A POSIX-like environment such as Linux, macOS, or WSL
 - `gcc`
 - `make`
 
-> The code uses headers such as `<sys/socket.h>` and `<netinet/in.h>`, so it is not intended to compile with the native Windows toolchain.
+> The project uses POSIX networking headers such as `<sys/socket.h>` and `<netinet/in.h>`, so it is not intended for the native Windows compiler toolchain.
 
 ## Build
 
@@ -41,68 +47,65 @@ Generated files such as build outputs and runtime data are ignored from version 
 make
 ```
 
-This produces the executables in `bin/`:
+This creates the binaries in `bin/`:
 
 - `bin/server`
 - `bin/client`
 
 ## Run
 
-Open two terminals.
-
-Start the server first:
+Start the server in one terminal:
 
 ```bash
 make run-server
 ```
 
-Then start the client in another terminal:
+Start the client in a second terminal:
 
 ```bash
 make run-client
 ```
 
-By default the client connects to `127.0.0.1:8080`.
+By default, the client connects to `127.0.0.1:8080`.
 
-## Default Login
+## Default Credentials
 
-The server creates a default admin user the first time it starts if no users exist yet.
+The first launch creates a default administrator account if the user database is empty.
 
 - Username: `admin`
 - Password: `admin123`
 
-## How It Works
+## Runtime Data
 
-```mermaid
-flowchart LR
-	A[Client terminal] -->|TCP socket| B[Threaded server]
-	B --> C[(users.dat)]
-	B --> D[(students.dat)]
-	B --> E[(faculty.dat)]
-	B --> F[(courses.dat)]
-```
-
-## Data Files
-
-The server automatically creates a `data/` directory and binary storage files on startup:
+When the server starts, it ensures the `data/` directory exists and creates the backing files used by the application:
 
 - `data/users.dat`
 - `data/students.dat`
 - `data/faculty.dat`
 - `data/courses.dat`
 
-These files are runtime state, not source code, so they stay out of git.
+These files contain runtime state only. Deleting `data/` resets the application.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A[Client terminal] -->|TCP socket| B[Threaded server]
+    B --> C[(users.dat)]
+    B --> D[(students.dat)]
+    B --> E[(faculty.dat)]
+    B --> F[(courses.dat)]
+```
 
 ## Notes
 
-- The protocol is text-driven and intended for local coursework use.
-- Because the project stores records in binary files, deleting `data/` resets the application state.
-- `report.pdf` is preserved as the original coursework report if you want to include it in the repository.
+- The project is designed for local execution and demonstration.
+- `report.pdf` is preserved as the original coursework report.
+- The GitHub Actions workflow in [.github/workflows/ci.yml](.github/workflows/ci.yml) provides a basic build check on push and pull request.
 
-## Suggested Next Improvements
+## Future Improvements
 
-- Split the shared socket helpers into a reusable module
-- Add automated tests for the message protocol and record persistence
-- Add a small demo GIF or screenshots to the README
-- Parameterize the server port and host through command-line arguments
-"# os-project" 
+- Split shared socket and file utilities into separate source files
+- Add automated tests for the text protocol and persistence layer
+- Parameterize the host and port through command-line arguments
+- Add screenshots or a short demo GIF for a stronger repository presentation
